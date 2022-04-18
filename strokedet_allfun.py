@@ -361,19 +361,30 @@ def handCalc(sec):
         del Hand2Y[0:20]
     
     wristDiff = np.empty((Hand1Yarray.shape[0],0),dtype=np.float64)
-    for i in range(Hand1Yarray.shape[0]):
-        if Hand1Yarray.shape[0] == Hand2Yarray.shape[0]:
-            wristDiff[i] = Hand1Yarray[i,0] - Hand2Yarray[i,0]
-        elif Hand1Yarray.shape[0] > Hand2Yarray.shape[0]:
-            excess = Hand1Yarray.shape[0] - Hand2Yarray.shape[0]
-            del Hand1Yarray[0:excess-1]
-            wristDiff[i] = Hand1Yarray[i,0] - Hand2Yarray[i,0]
-        elif Hand1Yarray.shape[0] < Hand2Yarray.shape[0]:
-            excess = Hand2Yarray.shape[0] - Hand1Yarray.shape[0]
-            del Hand2Yarray[0:excess-1]
-            wristDiff[i] = Hand1Yarray[i,0] - Hand2Yarray[i,0]
 
-    return wristDiff
+    if Hand1Yarray.shape[0] == 0 & Hand2Yarray.shape[0] == 0:
+        pass
+    else:
+        if Hand1Yarray.shape[0] > Hand2Yarray.shape[0]:
+            sz = Hand2Yarray.shape[0]
+        elif Hand1Yarray.shape[0] < Hand2Yarray.shape[0]:
+            sz = Hand1Yarray.shape[0]
+        else:
+            sz = Hand1Yarray.shape[0]
+
+        eqH1 = Hand1Yarray[0:sz,0]
+        eqH2 = Hand2Yarray[0:sz,0]
+        relDiff = [a/b for a,b in zip(eqH1,eqH2)]
+        wristDiff = np.abs(eqH1-eqH2)
+        # for k in range(len(eqH1)):
+        #     if eqH1[k] > eqH2[k]:
+        #         relDiff[k] = eqH2[k]/eqH1[k]
+        #     elif eqH1[k] < eqH2[k]:
+        #         relDiff[k] = eqH1[k]/eqH2[k]
+        #     else:
+        #         relDiff[k] = 1
+        
+    return eqH1, eqH2, wristDiff, relDiff
 
 def strokedet():
     past = []
