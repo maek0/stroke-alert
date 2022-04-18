@@ -376,13 +376,6 @@ def handCalc(sec):
         eqH2 = Hand2Yarray[0:sz,0]
         relDiff = [a/b for a,b in zip(eqH1,eqH2)]
         wristDiff = np.abs(eqH1-eqH2)
-        # for k in range(len(eqH1)):
-        #     if eqH1[k] > eqH2[k]:
-        #         relDiff[k] = eqH2[k]/eqH1[k]
-        #     elif eqH1[k] < eqH2[k]:
-        #         relDiff[k] = eqH1[k]/eqH2[k]
-        #     else:
-        #         relDiff[k] = 1
         
     return eqH1, eqH2, wristDiff, relDiff
 
