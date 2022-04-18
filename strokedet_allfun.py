@@ -9,12 +9,6 @@ from scipy import stats
 import glob
 from PIL import Image
 
-# workflow:
-# call strokedet() --> calls calcVars() --> calls facepose() ==> stroke determination
-# call baseline() --> calls getBaseImgs() --> calls staticImCalc() ==> saved baseline imgs and vectors
-
-# run mediapipe face & hand landmark identifiers --> result is all X and Y coordinates
-# called by calcVars()
 def facepose(sec):
     mp_drawing = mp.solutions.drawing_utils
     mp_drawing_styles = mp.solutions.drawing_styles
@@ -105,22 +99,14 @@ def facepose(sec):
     cap.release()
     return FaceX, FaceY, HandX, HandY
 
-# calls facepose()
-# calls strokedet()
-# indexes keypoints and calculates ratios & areas
-# called by strokedet
 def calcVars(sec):
     
-    FaceX, FaceY, HandX, HandY = facepose(sec)
+    FaceX, FaceY = facepose(sec)
 
     FaceXarray = np.array(FaceX[0:477])
     del FaceX[0:477]
     FaceYarray = np.array(FaceY[0:477])
     del FaceY[0:477]
-    HandXarray = np.array(HandX[0:41])
-    del HandX[0:41]
-    HandYarray = np.array(HandY[0:41])
-    del HandY[0:41]
 
     while len(FaceX) >= 478:
         FaceXarray = np.vstack((FaceXarray, FaceX[0:477]))
@@ -128,12 +114,6 @@ def calcVars(sec):
     while len(FaceY) >= 478:
         FaceYarray = np.vstack((FaceYarray, FaceY[0:477]))
         del FaceY[0:477]
-    while len(HandX) >= 42:
-        HandXarray = np.vstack((HandXarray, HandX[0:41]))
-        del HandX[0:41]
-    while len(HandY) >= 42:
-        HandYarray = np.vstack((HandYarray, HandY[0:41]))
-        del HandY[0:41]
 
     midInd = [10,9,8,168,6,197,195,5,4,1,19,94,2,164,0,17,18,200,199]
     rmouthInd = [76,184,40,39,37,0,17,84,181,91,146]
@@ -228,9 +208,6 @@ def calcVars(sec):
     saveArray = np.array([allMidShift, allLEArea, allREArea, EyeRatioArea, allLMouthA, allRMouthA, MouthRatioArea, allLEDiff, allREDiff, EyeRatioHeight, MouthCorners])
     return saveArray
 
-# (potentially) called by baseline()
-# opens video feed --> user presses 's' to save frame as a baseline image
-# user saves 10 images for the baseline
 def getBaseImgs():
     dir_path = os.getcwd()
     impath = "%s\BaselineImgs" % (dir_path)
@@ -276,6 +253,118 @@ def savebase(baseArray):
 
     np.save(os.path.join(arrpath, filename), baseArray)
 
+def handdet(sec):
+    mp_drawing = mp.solutions.drawing_utils
+    mp_drawing_styles = mp.solutions.drawing_styles
+    mp_hands = mp.solutions.hands
+
+    storepts = []
+
+    Hand1X = []
+    Hand1Y = []
+    Hand2X = []
+    Hand2Y = []
+
+    drawing_spec = mp_drawing.DrawingSpec(thickness=1, circle_radius=1)
+    cap = cv2.VideoCapture(0)
+    endtime = time.time() + sec
+
+    hands = mp_hands.Hands(model_complexity=0, min_detection_confidence=0.5, min_tracking_confidence=0.5)
+
+    while cap.isOpened():
+        success, image = cap.read()
+        if not success:
+            print("Ignoring empty camera frame.")
+            continue
+
+        image.flags.writeable = False
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        hands_result = hands.process(image)
+
+        image.flags.writeable = True
+        image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+        
+        if hands_result.multi_hand_landmarks:
+            for hand_landmarks in hands_result.multi_hand_landmarks:
+                mp_drawing.draw_landmarks(
+                    image,
+                    hand_landmarks,
+                    mp_hands.HAND_CONNECTIONS,
+                    mp_drawing_styles.get_default_hand_landmarks_style(),
+                    mp_drawing_styles.get_default_hand_connections_style())
+
+            for hand_no, hand_lm in enumerate(hands_result.multi_hand_landmarks):
+                if hand_no == 0:
+                    x = hand_lm.landmark[mp_hands.HandLandmark(0).value].x
+                    y = hand_lm.landmark[mp_hands.HandLandmark(0).value].y
+
+                    shape = image.shape 
+                    relative_x = int(x * shape[1])
+                    relative_y = int(y * shape[0])
+
+                    Hand1X.append(relative_x)
+                    Hand1Y.append(relative_y)
+
+                elif hand_no == 1:
+                    x = hand_lm.landmark[mp_hands.HandLandmark(1).value].x
+                    y = hand_lm.landmark[mp_hands.HandLandmark(1).value].y
+
+                    shape = image.shape 
+                    relative_x = int(x * shape[1])
+                    relative_y = int(y * shape[0])
+
+                    Hand2X.append(relative_x)
+                    Hand2Y.append(relative_y)
+
+                else:
+                    Hand1X = []
+                    Hand1Y = []
+                    Hand2X = []
+                    Hand2Y = []
+
+        cv2.imshow('MediaPipe Hand Points',cv2.flip(image, 1))
+
+        t = time.time()
+
+        if time.time() > endtime:
+            break
+        elif cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+
+    cap.release()
+    return Hand1X, Hand1Y, Hand2X, Hand2Y
+
+def handCalc(sec):
+
+    Hand1X, Hand1Y, Hand2X, Hand2Y = handdet(sec)
+
+    Hand1Xarray = np.array(Hand1X[0:20])
+    del Hand1X[0:20]
+    Hand1Yarray = np.array(Hand1Y[0:20])
+    del Hand1Y[0:20]
+    Hand2Xarray = np.array(Hand2X[0:20])
+    del Hand2X[0:20]
+    Hand2Yarray = np.array(Hand2Y[0:20])
+    del Hand2Y[0:20]
+
+    while len(Hand1X) >= 21:
+        Hand1Xarray = np.vstack((Hand1Xarray, Hand1X[0:20]))
+        del Hand1X[0:20]
+    while len(Hand1Y) >= 21:
+        Hand1Yarray = np.vstack((Hand1Yarray, Hand1Y[0:20]))
+        del Hand1Y[0:20]
+    while len(Hand2X) >= 21:
+        Hand2Xarray = np.vstack((Hand2Xarray, Hand2X[0:20]))
+        del Hand2X[0:20]
+    while len(Hand2Y) >= 21:
+        Hand2Yarray = np.vstack((Hand2Yarray, Hand2Y[0:20]))
+        del Hand2Y[0:20]
+    
+    rightWrist = np.empty((Hand1Xarray.shape[0],0),dtype=np.float64)
+    leftWrist = np.empty((Hand2Xarray.shape[0],0),dtype=np.float64)
+
+    return Hand1Xarray, Hand1Yarray, Hand2Xarray, Hand2Yarray
+
 def strokedet():
     past = []
     dir_path = os.getcwd()
@@ -288,7 +377,6 @@ def strokedet():
         raise ValueError("Need to establish baseline images before running!")
     else:
         if glob.glob(framefind):
-            # need to append to corrent row
             for file in glob.glob(framefind):
                 temp = np.load(file)
                 if past == []:
@@ -319,21 +407,23 @@ def strokedet():
     # [MouthCorners]]
 
     array = calcVars(5)
-    _, p1 = stats.ttest_ind(past[3],array[3])
-    _, p2 = stats.ttest_ind(past[6],array[6])
-    _, p3 = stats.ttest_ind(past[9],array[9])
-    _, p4 = stats.ttest_ind(past[10],array[10])
+    _, p1 = stats.ttest_ind(past[3],array[3])       # EyeRatioArea p-value
+    # _, p2 = stats.ttest_ind(past[6],array[6])       # MouthRatioArea p-value
+    _, p3 = stats.ttest_ind(past[9],array[9])       # EyeRatioHeight p-value
+    _, p4 = stats.ttest_ind(past[10],array[10])     # MouthCorners p-value
 
-    ps = np.array([p1,p2,p3,p4])
+    # ps = np.array([p1,p2,p3,p4])
+    ps = np.array([p1,p3,p4])
 
     r = np.mean(ps)
 
-    if r <= 0.2:
-        ruling = 1
+    if r <= 0.5:
+        # ruling = 1
+        HandX, HandY = handdet(5)
     else:
         ruling = 0
 
-    if ruling == 0:
+    if r >= 0.8:
         dir_path = os.getcwd()
         arrpath = "%s\SavedArrays" % (dir_path)
         isExist = os.path.exists(arrpath)
