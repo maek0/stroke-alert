@@ -360,10 +360,20 @@ def handCalc(sec):
         Hand2Yarray = np.vstack((Hand2Yarray, Hand2Y[0:20]))
         del Hand2Y[0:20]
     
-    rightWrist = np.empty((Hand1Xarray.shape[0],0),dtype=np.float64)
-    leftWrist = np.empty((Hand2Xarray.shape[0],0),dtype=np.float64)
+    wristDiff = np.empty((Hand1Yarray.shape[0],0),dtype=np.float64)
+    for i in range(Hand1Yarray.shape[0]):
+        if Hand1Yarray.shape[0] == Hand2Yarray.shape[0]:
+            wristDiff[i] = Hand1Yarray[i,0] - Hand2Yarray[i,0]
+        elif Hand1Yarray.shape[0] > Hand2Yarray.shape[0]:
+            excess = Hand1Yarray.shape[0] - Hand2Yarray.shape[0]
+            del Hand1Yarray[0:excess-1]
+            wristDiff[i] = Hand1Yarray[i,0] - Hand2Yarray[i,0]
+        elif Hand1Yarray.shape[0] < Hand2Yarray.shape[0]:
+            excess = Hand2Yarray.shape[0] - Hand1Yarray.shape[0]
+            del Hand2Yarray[0:excess-1]
+            wristDiff[i] = Hand1Yarray[i,0] - Hand2Yarray[i,0]
 
-    return Hand1Xarray, Hand1Yarray, Hand2Xarray, Hand2Yarray
+    return wristDiff
 
 def strokedet():
     past = []

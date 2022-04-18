@@ -19,5 +19,5 @@ from strokedet_allfun import handCalc
 # result = 1 --> likely stroke
 # r is the average of p-values of determining characteristics
 
-Hand1Xarray, Hand1Yarray, Hand2Xarray, Hand2Yarray = handCalc(5)
-print(Hand1Xarray)
+wrist = handCalc(5)
+print(wrist)
