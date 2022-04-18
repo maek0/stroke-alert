@@ -73,7 +73,18 @@ There should then be a folder that you can open in whatever text editor you choo
 ### Git Commands
 
 - `git branch` - shows the repository branch your code is from
+- `git checkout <branch>` - this will switch you to the branch you specify
+- `git checkout -b <new branch name>` - this will create and switch you to a new branch with the name you specify
 - `git pull` - pulls the latest updates from the branch your code is from
+- `git add <files>` - adds the changes made to the specified files. Use `git add .` if you want to add all changes made to the base directory.
+- `git commit -m "commit message"` - makes a commit with the added changes. The commit message will just carry a message to specifiy what changes were made.
+- `git push` - this will push all new commits to the branch in the remote repository
+
+General order to add you changes to the remote repository:
+- `git branch` - make sure you're on the branch you want to change
+- `git add .` - add all of your changes
+- `git commit -m "message"` - commit your changes with an appropriate commit message
+- `git push` - push the changes
 
 ### Possible Errors
 
