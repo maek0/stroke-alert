@@ -431,13 +431,17 @@ def strokedet():
 
     r = np.mean(ps)
 
-    if r <= 0.5:
+    if r <= 0.4:
         # ruling = 1
-        HandX, HandY = handdet(5)
+        _, _, wristDiff, relDiff = handCalc(5)
+        if relDiff >= 2 | relDiff <= 0.5:
+            ruling = 1
+        else:
+            ruling = 0
     else:
         ruling = 0
 
-    if r >= 0.8:
+    if r >= 0.75:
         dir_path = os.getcwd()
         arrpath = "%s\SavedArrays" % (dir_path)
         isExist = os.path.exists(arrpath)

@@ -1,5 +1,3 @@
-# call strokedet --> record 5s of video and get ruling based on baseline or past imgs
-
 import cv2
 import mediapipe as mp
 import numpy as np
