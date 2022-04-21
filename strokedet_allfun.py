@@ -8,6 +8,7 @@ import os, os.path
 from scipy import stats
 import glob
 from PIL import Image
+import platform
 
 def facepose(sec):
     mp_drawing = mp.solutions.drawing_utils
@@ -210,7 +211,11 @@ def calcVars(sec):
 
 def getBaseImgs():
     dir_path = os.getcwd()
-    impath = "%s\BaselineImgs" % (dir_path)
+    opsys = platform.system()
+    if opsys == 'Windows':
+        impath = "%s\BaselineImgs" % (dir_path)     # Windows
+    else:
+        impath = "%s/BaselineImgs" % (dir_path)     # MAC
 
     isExist = os.path.exists(impath)
 
@@ -243,7 +248,12 @@ def setbase():
 
 def savebase(baseArray):
     dir_path = os.getcwd()
-    arrpath = "%s\SavedArrays" % (dir_path)
+    opsys = platform.system()
+    if opsys == 'Windows':
+        arrpath = "%s\SavedArrays" % (dir_path)     # Windows
+    else:
+        arrpath = "%s/SavedArrays" % (dir_path)     # MAC
+    
     isExist = os.path.exists(arrpath)
     if not isExist:
         os.makedirs(arrpath)
@@ -422,17 +432,14 @@ def strokedet():
 
     array = calcVars(5)
     _, p1 = stats.ttest_ind(past[3],array[3])       # EyeRatioArea p-value
-    # _, p2 = stats.ttest_ind(past[6],array[6])       # MouthRatioArea p-value
     _, p3 = stats.ttest_ind(past[9],array[9])       # EyeRatioHeight p-value
     _, p4 = stats.ttest_ind(past[10],array[10])     # MouthCorners p-value
 
-    # ps = np.array([p1,p2,p3,p4])
     ps = np.array([p1,p3,p4])
 
     r = np.mean(ps)
 
     if r <= 0.4:
-        # ruling = 1
         _, _, wristDiff, relDiff = handCalc(5)
         if relDiff >= 2 | relDiff <= 0.5:
             ruling = 1
@@ -443,7 +450,13 @@ def strokedet():
 
     if r >= 0.75:
         dir_path = os.getcwd()
-        arrpath = "%s\SavedArrays" % (dir_path)
+        opsys = platform.system()
+        
+        if opsys == 'Windows':
+            arrpath = "%s\SavedArrays" % (dir_path)
+        else:
+            arrpath = "%s/SavedArrays" % (dir_path)
+
         isExist = os.path.exists(arrpath)
         if not isExist:
             os.makedirs(arrpath)
