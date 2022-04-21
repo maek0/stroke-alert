@@ -88,7 +88,7 @@ def facepose(sec):
 
                     # handPts.append([relative_x, relative_y])
 
-        cv2.imshow('MediaPipe Face Mesh',cv2.flip(image, 1))
+        # cv2.imshow('MediaPipe Face Mesh',cv2.flip(image, 1))
 
         t = time.time()
 
@@ -229,7 +229,7 @@ def getBaseImgs():
         if not success:
             print("Ignoring empty camera frame.")
             continue
-        cv2.imshow('MediaPipe Face Mesh',cv2.flip(image, 1))
+        # cv2.imshow('MediaPipe Face Mesh',cv2.flip(image, 1))
 
         if cv2.waitKey(1) & 0xFF == ord('s'):
             timestr = time.strftime("%m-%d-%Y_%H-%M-%S")
@@ -332,7 +332,7 @@ def handdet(sec):
                     Hand2X = []
                     Hand2Y = []
 
-        cv2.imshow('MediaPipe Hand Points',cv2.flip(image, 1))
+        # cv2.imshow('MediaPipe Hand Points',cv2.flip(image, 1))
 
         t = time.time()
 
