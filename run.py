@@ -10,4 +10,7 @@ from strokedet_allfun import handCalc
 # result = 1 --> likely stroke
 # r is the average of p-values of determining characteristics
 
+# setbase()
 ruling, r = strokedet()
+print(ruling)
+print(r)

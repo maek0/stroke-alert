@@ -98,7 +98,7 @@ def facepose(sec):
             break
 
     cap.release()
-    return FaceX, FaceY, HandX, HandY
+    return FaceX, FaceY
 
 def calcVars(sec):
     
@@ -209,38 +209,38 @@ def calcVars(sec):
     saveArray = np.array([allMidShift, allLEArea, allREArea, EyeRatioArea, allLMouthA, allRMouthA, MouthRatioArea, allLEDiff, allREDiff, EyeRatioHeight, MouthCorners])
     return saveArray
 
-def getBaseImgs():
-    dir_path = os.getcwd()
-    opsys = platform.system()
-    if opsys == 'Windows':
-        impath = "%s\BaselineImgs" % (dir_path)     # Windows
-    else:
-        impath = "%s/BaselineImgs" % (dir_path)     # MAC
+# def getBaseImgs():
+#     dir_path = os.getcwd()
+#     opsys = platform.system()
+#     if opsys == 'Windows':
+#         impath = "%s\BaselineImgs" % (dir_path)     # Windows
+#     else:
+#         impath = "%s/BaselineImgs" % (dir_path)     # MAC
 
-    isExist = os.path.exists(impath)
+#     isExist = os.path.exists(impath)
 
-    if not isExist:
-        os.makedirs(impath)
+#     if not isExist:
+#         os.makedirs(impath)
 
-    count = 0
-    cap = cv2.VideoCapture(0)
-    while cap.isOpened():
-        success, image = cap.read()
-        if not success:
-            print("Ignoring empty camera frame.")
-            continue
-        cv2.imshow('MediaPipe Face Mesh',cv2.flip(image, 1))
+#     count = 0
+#     cap = cv2.VideoCapture(0)
+#     while cap.isOpened():
+#         success, image = cap.read()
+#         if not success:
+#             print("Ignoring empty camera frame.")
+#             continue
+#         cv2.imshow('MediaPipe Face Mesh',cv2.flip(image, 1))
 
-        if cv2.waitKey(1) & 0xFF == ord('s'):
-            timestr = time.strftime("%m-%d-%Y_%H-%M-%S")
-            filename = "base_%s.jpg" % (timestr)
-            cv2.imwrite(os.path.join(impath, filename), image)
-            count += 1
-            print("Saved ",filename,", Image ",count," of 10")
+#         if cv2.waitKey(1) & 0xFF == ord('s'):
+#             timestr = time.strftime("%m-%d-%Y_%H-%M-%S")
+#             filename = "base_%s.jpg" % (timestr)
+#             cv2.imwrite(os.path.join(impath, filename), image)
+#             count += 1
+#             print("Saved ",filename,", Image ",count," of 10")
 
-            if count == 10:
-                break
-    cap.release()
+#             if count == 10:
+#                 break
+#     cap.release()
 
 def setbase():
     baseArray = calcVars(30)
@@ -430,7 +430,7 @@ def strokedet():
     # [EyeRatioHeight], 
     # [MouthCorners]]
 
-    array = calcVars(5)
+    array = calcVars(8)
     _, p1 = stats.ttest_ind(past[3],array[3])       # EyeRatioArea p-value
     _, p3 = stats.ttest_ind(past[9],array[9])       # EyeRatioHeight p-value
     _, p4 = stats.ttest_ind(past[10],array[10])     # MouthCorners p-value
@@ -439,16 +439,19 @@ def strokedet():
 
     r = np.mean(ps)
 
-    if r <= 0.4:
-        _, _, wristDiff, relDiff = handCalc(5)
-        if relDiff >= 2 | relDiff <= 0.5:
+    if r <= 0.5:
+        _, _, wristDiff, relDiff = handCalc(8)
+        relDiff = np.mean(relDiff[3:])
+        if relDiff >= 2:
+            ruling = 1
+        elif relDiff <= 0.5:
             ruling = 1
         else:
             ruling = 0
     else:
         ruling = 0
 
-    if r >= 0.75:
+    if r >= 0.6:
         dir_path = os.getcwd()
         opsys = platform.system()
         
