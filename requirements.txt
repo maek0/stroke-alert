@@ -1,0 +1,8 @@
+numpy
+mediapipe
+opencv
+shapely
+scipy
+streamlit
+PySimpleGUI
+streamlit_webrtc

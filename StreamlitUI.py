@@ -14,16 +14,20 @@ from strokedet_allfun import setbase
 from streamlit_webrtc import webrtc_streamer
 import av
 import cv2
+
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 mp_face_mesh = mp.solutions.face_mesh
 mp_hands = mp.solutions.hands
+
 face_mesh = mp_face_mesh.FaceMesh(max_num_faces=1, refine_landmarks=True, min_detection_confidence=0.8, min_tracking_confidence=0.7)
 hands = mp_hands.Hands(model_complexity=0, min_detection_confidence=0.5, min_tracking_confidence=0.5)
+
 st.write('Welcome to Stroke Alert! This application uses features from your face like your eyes, nose, and mouth to determine if you are having a stroke. It will also display how confident we are with our prediction.')
 st.write('To use this app, first click start to view the real time video with the tesselation that is extracting facial features. Then, click "Set Baseline" so the algorithm can record baseline data. When you are ready to run the algorithm, click "Run Detector!!')
 st.write('To reset the app, click the "Stop" button below the video player')
 st.write('Prior to use, read the instructions for use carefully! :https://docs.google.com/document/d/1B8YqBl4R1NvvypYeVmfYzLNlG5ipcKHK3ztidYRZ3C8/edit')
+
 def detect():
     result, r = strokedet()
     if result == 0:
