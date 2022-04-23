@@ -26,9 +26,8 @@ hands = mp_hands.Hands(model_complexity=0, min_detection_confidence=0.5, min_tra
 st.write('Welcome to Stroke Alert! This application uses features from your face like your eyes, nose, and mouth to determine if you are having a stroke. It will also display how confident we are with our prediction.')
 st.write('To use this app, first click "Start" to view the real time video with the face tesselation, that is extracting facial features. If this is your first time using the app, click "Set Baseline" so the algorithm can record baseline data (30 seconds). If you have a stored baseline and you are ready to run the detector, click "Run Detector!!')
 st.write('To reset the app, click the "Stop" button below the video player')
-st.write('Prior to use, read the instructions for use carefully! :https://docs.google.com/document/d/1B8YqBl4R1NvvypYeVmfYzLNlG5ipcKHK3ztidYRZ3C8/edit')
-
 st.write('Before using the app, please read the instructions for use carefully! :https://docs.google.com/document/d/1B8YqBl4R1NvvypYeVmfYzLNlG5ipcKHK3ztidYRZ3C8/edit')
+
 def detect():
     result, r = strokedet()
     if result == 0:
@@ -44,6 +43,7 @@ def detect():
 class VideoProcessor:
     def recv(self, frame):
         frm = frame.to_ndarray(format="bgr24")
+        frm = np.flip(frm)
         fm_result = face_mesh.process(frm)
         if fm_result.multi_face_landmarks:
             for face_landmarks in fm_result.multi_face_landmarks:
