@@ -43,7 +43,7 @@ def detect():
 class VideoProcessor:
     def recv(self, frame):
         frm = frame.to_ndarray(format="bgr24")
-        frm = np.flip(frm)
+        frm = np.flip(frm,axis=1)
         fm_result = face_mesh.process(frm)
         if fm_result.multi_face_landmarks:
             for face_landmarks in fm_result.multi_face_landmarks:
