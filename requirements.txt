@@ -1,6 +1,6 @@
 numpy
 mediapipe
-opencv
+opencv-python
 shapely
 scipy
 streamlit
