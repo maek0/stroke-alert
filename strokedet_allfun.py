@@ -398,7 +398,8 @@ def strokedet():
     isExist = os.path.exists(arrpath)
 
     if not isExist:
-        raise ValueError("Need to establish baseline images before running!")
+        # raise ValueError("Need to establish baseline images before running!")
+        Warning("Need to establish baseline images before running!")
     else:
         if glob.glob(framefind):
             for file in glob.glob(framefind):
@@ -415,7 +416,8 @@ def strokedet():
                 else:
                     past = np.hstack((past, temp))
         else:
-            raise ValueError("Need to establish baseline images before running!")
+            # raise ValueError("Need to establish baseline images before running!")
+            Warning("Need to establish baseline images before running!")
 
     # array order:
     # [[allMidShift], 
@@ -439,18 +441,6 @@ def strokedet():
 
     r = np.mean(ps)
 
-    if r <= 0.5:
-        _, _, wristDiff, relDiff = handCalc(8)
-        relDiff = np.mean(relDiff[3:])
-        if relDiff >= 2:
-            ruling = 1
-        elif relDiff <= 0.5:
-            ruling = 1
-        else:
-            ruling = 0
-    else:
-        ruling = 0
-
     if r >= 0.6:
         dir_path = os.getcwd()
         opsys = platform.system()
@@ -469,5 +459,17 @@ def strokedet():
 
         np.save(os.path.join(arrpath, filename), array)
 
-    return ruling, r
+    return r
 
+def strokedetII(r):
+    _, _, wristDiff, relDiff = handCalc(8)
+    relDiff = np.mean(relDiff[3:])
+    
+    if relDiff >= 2:
+        ruling = 1
+    elif relDiff <= 0.5:
+        ruling = 1
+    else:
+        ruling = 0
+    
+    return ruling

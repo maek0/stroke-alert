@@ -10,6 +10,7 @@ from shapely.geometry import Polygon
 import math
 from scipy import stats
 from strokedet_allfun import strokedet
+from strokedet_allfun import strokedetII
 from strokedet_allfun import setbase
 from streamlit_webrtc import webrtc_streamer
 import av
@@ -29,7 +30,11 @@ st.write('To reset the app, click the "Stop" button below the video player')
 st.write('Before using the app, please read the instructions for use carefully! :https://docs.google.com/document/d/1B8YqBl4R1NvvypYeVmfYzLNlG5ipcKHK3ztidYRZ3C8/edit')
 
 def detect():
-    result, r = strokedet()
+    r = strokedet()
+    
+    if r < 0.5:
+        ruling = strokedetII(r)
+
     if result == 0:
         st.markdown("""<style>.big-font {font-size:50px !important;}</style>""", unsafe_allow_html=True)
         st.markdown('<p class="big-font">Stroke Unlikely !!</p>', unsafe_allow_html=True)
