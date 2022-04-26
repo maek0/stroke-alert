@@ -46,13 +46,13 @@ def facepose(sec):
         
         if fm_result.multi_face_landmarks:
             for face_landmarks in fm_result.multi_face_landmarks:
-                mp_drawing.draw_landmarks(
-                    image=image,
-                    landmark_list=face_landmarks,
-                    connections=mp_face_mesh.FACEMESH_TESSELATION,
-                    landmark_drawing_spec=None,
-                    connection_drawing_spec=mp_drawing_styles
-                    .get_default_face_mesh_tesselation_style())
+                # mp_drawing.draw_landmarks(
+                #     image=image,
+                #     landmark_list=face_landmarks,
+                #     connections=mp_face_mesh.FACEMESH_TESSELATION,
+                #     landmark_drawing_spec=None,
+                #     connection_drawing_spec=mp_drawing_styles
+                #     .get_default_face_mesh_tesselation_style())
 
                 for id,lm in enumerate(face_landmarks.landmark):
                     x = lm.x
@@ -66,29 +66,29 @@ def facepose(sec):
                     FaceY.append(relative_y)
                     storepts.append([relative_x, relative_y])
         
-        if hands_result.multi_hand_landmarks:
-            for hand_landmarks in hands_result.multi_hand_landmarks:
-                mp_drawing.draw_landmarks(
-                    image,
-                    hand_landmarks,
-                    mp_hands.HAND_CONNECTIONS,
-                    mp_drawing_styles.get_default_hand_landmarks_style(),
-                    mp_drawing_styles.get_default_hand_connections_style())
+        # if hands_result.multi_hand_landmarks:
+        #     for hand_landmarks in hands_result.multi_hand_landmarks:
+                # mp_drawing.draw_landmarks(
+                #     image,
+                #     hand_landmarks,
+                #     mp_hands.HAND_CONNECTIONS,
+                #     mp_drawing_styles.get_default_hand_landmarks_style(),
+                #     mp_drawing_styles.get_default_hand_connections_style())
                 
-                for id,lm in enumerate(hand_landmarks.landmark):
-                    x = lm.x
-                    y = lm.y
+                # for id,lm in enumerate(hand_landmarks.landmark):
+                #     x = lm.x
+                #     y = lm.y
 
-                    shape = image.shape 
-                    relative_x = int(x * shape[1])
-                    relative_y = int(y * shape[0])
+                #     shape = image.shape 
+                #     relative_x = int(x * shape[1])
+                #     relative_y = int(y * shape[0])
 
-                    HandX.append(relative_x)
-                    HandY.append(relative_y)
+                #     HandX.append(relative_x)
+                #     HandY.append(relative_y)
 
                     # handPts.append([relative_x, relative_y])
 
-        cv2.imshow('MediaPipe Face Mesh',cv2.flip(image, 1))
+        # cv2.imshow('MediaPipe Face Mesh',cv2.flip(image, 1))
 
         t = time.time()
 
@@ -295,13 +295,13 @@ def handdet(sec):
         image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
         
         if hands_result.multi_hand_landmarks:
-            for hand_landmarks in hands_result.multi_hand_landmarks:
-                mp_drawing.draw_landmarks(
-                    image,
-                    hand_landmarks,
-                    mp_hands.HAND_CONNECTIONS,
-                    mp_drawing_styles.get_default_hand_landmarks_style(),
-                    mp_drawing_styles.get_default_hand_connections_style())
+            # for hand_landmarks in hands_result.multi_hand_landmarks:
+            #     mp_drawing.draw_landmarks(
+            #         image,
+            #         hand_landmarks,
+            #         mp_hands.HAND_CONNECTIONS,
+            #         mp_drawing_styles.get_default_hand_landmarks_style(),
+            #         mp_drawing_styles.get_default_hand_connections_style())
 
             for hand_no, hand_lm in enumerate(hands_result.multi_hand_landmarks):
                 if hand_no == 0:
@@ -332,7 +332,7 @@ def handdet(sec):
                     Hand2X = []
                     Hand2Y = []
 
-        cv2.imshow('MediaPipe Hand Points',cv2.flip(image, 1))
+        # cv2.imshow('MediaPipe Hand Points',cv2.flip(image, 1))
 
         t = time.time()
 

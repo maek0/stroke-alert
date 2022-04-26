@@ -43,7 +43,7 @@ def detect():
 class VideoProcessor:
     def recv(self, frame):
         frm = frame.to_ndarray(format="bgr24")
-        frm = np.flip(frm,axis=1)
+        # frm = np.flip(frm,axis=1)
         fm_result = face_mesh.process(frm)
         if fm_result.multi_face_landmarks:
             for face_landmarks in fm_result.multi_face_landmarks:
@@ -63,7 +63,7 @@ class VideoProcessor:
                     mp_hands.HAND_CONNECTIONS,
                     mp_drawing_styles.get_default_hand_landmarks_style(),
                     mp_drawing_styles.get_default_hand_connections_style())
-        return av.VideoFrame.from_ndarray(frm, format = 'bgr24')
+        return av.VideoFrame.from_ndarray(np.flip(frm,axis=1), format = 'bgr24')
 webrtc_streamer(key = "key", video_processor_factory=VideoProcessor)
 with st.sidebar:
     st.title('Welcome to Stroke Alert!')
