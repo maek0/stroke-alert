@@ -98,7 +98,7 @@ def facepose(sec):
             break
 
     cap.release()
-    return FaceX, FaceY, HandX, HandY
+    return FaceX, FaceY
 
 def calcVars(sec):
     
