@@ -42,6 +42,8 @@ class VideoProcessor:
 
 def detect():
     r = strokedet()
+    print(r)
+    opr = 100*r
     
     if r < 0.5:
         st.markdown("""<style>.big-font {font-size:50px !important;}</style>""", unsafe_allow_html=True)
@@ -55,13 +57,13 @@ def detect():
         st.markdown("""<style>.big-font {font-size:0px !important;}</style>""", unsafe_allow_html=True)
         st.markdown("""<style>.stroke-unlikely {font-size:50px !important;}</style>""", unsafe_allow_html=True)
         st.markdown('<p class="stroke-unlikely">Stroke Unlikely !!</p>', unsafe_allow_html=True)
-        st.write('Percent Confidence:', r*100)
+        st.write("Percent Confidence: %.2f" % opr)
         time.sleep(5)
     else:
         st.markdown("""<style>.big-font {font-size:0px !important;}</style>""", unsafe_allow_html=True)
         st.markdown("""<style>.stroke-likely {font-size:50px !important;}</style>""", unsafe_allow_html=True)
         st.markdown('<p class="stroke-likely">Stroke Likely !!</p>', unsafe_allow_html=True)
-        st.write('Percent Confidence:', r*100)
+        st.write("Percent Confidence: %.2f" % opr)
         time.sleep(5)
 
 # ==============================================

@@ -210,7 +210,7 @@ def calcVars(sec):
     return saveArray
 
 def setbase():
-    baseArray = calcVars(30)
+    baseArray = calcVars(10)
     savebase(baseArray)
 
 def savebase(baseArray):
@@ -365,8 +365,8 @@ def strokedet():
     isExist = os.path.exists(arrpath)
 
     if not isExist:
-        # raise ValueError("Need to establish baseline images before running!")
-        Warning("Need to establish baseline images before running!")
+        raise ValueError("Need to establish baseline images before running!")
+        # Warning("Need to establish baseline images before running!")
     else:
         if glob.glob(framefind):
             for file in glob.glob(framefind):
@@ -383,8 +383,8 @@ def strokedet():
                 else:
                     past = np.hstack((past, temp))
         else:
-            # raise ValueError("Need to establish baseline images before running!")
-            Warning("Need to establish baseline images before running!")
+            raise ValueError("Need to establish baseline images before running!")
+            # Warning("Need to establish baseline images before running!")
 
     # array order:
     # [[allMidShift], 
@@ -399,7 +399,7 @@ def strokedet():
     # [EyeRatioHeight], 
     # [MouthCorners]]
 
-    array = calcVars(8)
+    array = calcVars(5)
     _, p1 = stats.ttest_ind(past[3],array[3])       # EyeRatioArea p-value
     _, p3 = stats.ttest_ind(past[9],array[9])       # EyeRatioHeight p-value
     _, p4 = stats.ttest_ind(past[10],array[10])     # MouthCorners p-value
@@ -429,12 +429,12 @@ def strokedet():
     return r
 
 def strokedetII(r):
-    wristDiff, relDiff = handCalc(8)
-    relDiff = np.mean(relDiff[3:])
+    wristDiff, rDiff = handCalc(5)
+    rDiff = np.mean(rDiff[3:])
     
-    if relDiff >= 2:
+    if rDiff >= 2:
         ruling = 1
-    elif relDiff <= 0.5:
+    elif rDiff <= 0.5:
         ruling = 1
     else:
         ruling = 0
