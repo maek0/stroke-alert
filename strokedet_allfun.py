@@ -209,39 +209,6 @@ def calcVars(sec):
     saveArray = np.array([allMidShift, allLEArea, allREArea, EyeRatioArea, allLMouthA, allRMouthA, MouthRatioArea, allLEDiff, allREDiff, EyeRatioHeight, MouthCorners])
     return saveArray
 
-# def getBaseImgs():
-#     dir_path = os.getcwd()
-#     opsys = platform.system()
-#     if opsys == 'Windows':
-#         impath = "%s\BaselineImgs" % (dir_path)     # Windows
-#     else:
-#         impath = "%s/BaselineImgs" % (dir_path)     # MAC
-
-#     isExist = os.path.exists(impath)
-
-#     if not isExist:
-#         os.makedirs(impath)
-
-#     count = 0
-#     cap = cv2.VideoCapture(0)
-#     while cap.isOpened():
-#         success, image = cap.read()
-#         if not success:
-#             print("Ignoring empty camera frame.")
-#             continue
-#         cv2.imshow('MediaPipe Face Mesh',cv2.flip(image, 1))
-
-#         if cv2.waitKey(1) & 0xFF == ord('s'):
-#             timestr = time.strftime("%m-%d-%Y_%H-%M-%S")
-#             filename = "base_%s.jpg" % (timestr)
-#             cv2.imwrite(os.path.join(impath, filename), image)
-#             count += 1
-#             print("Saved ",filename,", Image ",count," of 10")
-
-#             if count == 10:
-#                 break
-#     cap.release()
-
 def setbase():
     baseArray = calcVars(30)
     savebase(baseArray)
