@@ -12,19 +12,27 @@ from showVidFcns import handCalc
 
 r = strokedet()
 if r < 0.5:
-    print("\nRaise your Hands!\n\n")
+    print("--------------------")
+    print("\nRaise your Hands!\n")
+    print("--------------------")
     ruling = strokedetII(r)
 else:
     ruling = 0
 
 if ruling == 0:
     opr = 100*(1-r)
-    print("\n\nNo Stroke Detected\n")
+    print("--------------------\n")
+    print("No Stroke Detected\n")
+    if r < 0.5:
+        print("There is some uncertainty in the probability. For more accuracy, move to a place with better lighting.")
     print("There is a %.2f percent chance you are experiencing a stroke\n" % opr)
+    print("--------------------")
 else:
     opr = 100*(1-r)
-    print("\n\nThere is a %.2f percent chance you are experiencing a stroke" % opr)
-    print("\nStroke Likely: call EMS\n")
+    print("--------------------\n")
+    print("Stroke Likely: call EMS\n")
+    print("\nThere is a %.2f percent chance you are experiencing a stroke" % opr)
+    print("--------------------")
 
 # print(ruling)
 # print(r)
