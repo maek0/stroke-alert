@@ -1,6 +1,7 @@
 import cv2
 import mediapipe as mp
 import numpy as np
+import itertools
 import time
 from shapely.geometry import Polygon
 import math
@@ -27,8 +28,8 @@ def facepose(sec):
     cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
     endtime = time.time() + sec
 
-    face_mesh = mp_face_mesh.FaceMesh(max_num_faces=1, refine_landmarks=True, min_detection_confidence=0.8, min_tracking_confidence=0.7)
-    hands = mp_hands.Hands(model_complexity=0, min_detection_confidence=0.5, min_tracking_confidence=0.5)
+    face_mesh = mp_face_mesh.FaceMesh(max_num_faces=1, refine_landmarks=True, min_detection_confidence=0.8, min_tracking_confidence=0.8)
+    hands = mp_hands.Hands(model_complexity=0, min_detection_confidence=0.8, min_tracking_confidence=0.8)
 
     while cap.isOpened():
         success, image = cap.read()
@@ -103,6 +104,7 @@ def facepose(sec):
 def calcVars(sec):
     
     FaceX, FaceY = facepose(sec)
+    mp_face_mesh = mp.solutions.face_mesh
 
     FaceXarray = np.array(FaceX[0:477])
     del FaceX[0:477]
@@ -119,8 +121,10 @@ def calcVars(sec):
     midInd = [10,9,8,168,6,197,195,5,4,1,19,94,2,164,0,17,18,200,199]
     rmouthInd = [76,184,40,39,37,0,17,84,181,91,146]
     lmouthInd = [0,267,269,270,408,306,307,321,405,314,17]
-    leInd = [362,398,384,385,386,387,388,466,263,249,390,373,374,380,381,382]
-    reInd = [33,246,161,160,159,158,157,173,133,155,154,153,145,144,163,7]
+    leInd = list(set(itertools.chain(*mp_face_mesh.FACEMESH_LEFT_EYE)))
+    reInd = list(set(itertools.chain(*mp_face_mesh.FACEMESH_RIGHT_EYE)))
+    # leInd = [362,398,384,385,386,387,388,466,263,249,390,373,374,380,381,382]
+    # reInd = [33,246,161,160,159,158,157,173,133,155,154,153,145,144,163,7]
 
     midXshift = np.empty((FaceXarray.shape[0],0),dtype=np.float64)
     lmouthA = np.empty((FaceXarray.shape[0],0),dtype=np.float64)
