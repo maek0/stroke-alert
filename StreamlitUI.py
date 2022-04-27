@@ -19,7 +19,6 @@ import cv2
 class VideoProcessor:
     def recv(self, frame):
         frm = frame.to_ndarray(format="bgr24")
-        # frm = np.flip(frm,axis=1)
         fm_result = face_mesh.process(frm)
         if fm_result.multi_face_landmarks:
             for face_landmarks in fm_result.multi_face_landmarks:
@@ -60,8 +59,8 @@ def detect():
         time.sleep(5)
     else:
         st.markdown("""<style>.big-font {font-size:0px !important;}</style>""", unsafe_allow_html=True)
-        st.markdown("""<style>.stroke-unlikely {font-size:50px !important;}</style>""", unsafe_allow_html=True)
-        st.markdown('<p class="stroke-unlikely">Stroke Likely !!</p>', unsafe_allow_html=True)
+        st.markdown("""<style>.stroke-likely {font-size:50px !important;}</style>""", unsafe_allow_html=True)
+        st.markdown('<p class="stroke-likely">Stroke Likely !!</p>', unsafe_allow_html=True)
         st.write('Percent Confidence:', r*100)
         time.sleep(5)
 
