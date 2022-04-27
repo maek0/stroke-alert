@@ -43,7 +43,7 @@ class VideoProcessor:
 def detect():
     r = strokedet()
     
-    if r < 0.5:
+    if r < 0.6:
         st.markdown("""<style>.big-font {font-size:50px !important;}</style>""", unsafe_allow_html=True)
         st.markdown('<p class="big-font">Raise your hands</p>', unsafe_allow_html=True)
         ruling = strokedetII(r)

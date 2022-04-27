@@ -119,8 +119,10 @@ def calcVars(sec):
     midInd = [10,9,8,168,6,197,195,5,4,1,19,94,2,164,0,17,18,200,199]
     rmouthInd = [76,184,40,39,37,0,17,84,181,91,146]
     lmouthInd = [0,267,269,270,408,306,307,321,405,314,17]
-    leInd = [362,398,384,385,386,387,388,466,263,249,390,373,374,380,381,382]
-    reInd = [33,246,161,160,159,158,157,173,133,155,154,153,145,144,163,7]
+    leInd = list(set(itertools.chain(*mp_face_mesh.FACEMESH_LEFT_EYE)))
+    reInd = list(set(itertools.chain(*mp_face_mesh.FACEMESH_RIGHT_EYE)))
+    # leInd = [362,398,384,385,386,387,388,466,263,249,390,373,374,380,381,382]
+    # reInd = [33,246,161,160,159,158,157,173,133,155,154,153,145,144,163,7]
 
     midXshift = np.empty((FaceXarray.shape[0],0),dtype=np.float64)
     lmouthA = np.empty((FaceXarray.shape[0],0),dtype=np.float64)
@@ -243,7 +245,7 @@ def calcVars(sec):
 #     cap.release()
 
 def setbase():
-    baseArray = calcVars(30)
+    baseArray = calcVars(15)
     savebase(baseArray)
 
 def savebase(baseArray):
@@ -384,10 +386,10 @@ def handCalc(sec):
 
         eqH1 = Hand1Yarray[0:sz,0]
         eqH2 = Hand2Yarray[0:sz,0]
-        relDiff = [a/b for a,b in zip(eqH1,eqH2)]
-        wristDiff = np.abs(eqH1-eqH2)
+    relDiff = [a/b for a,b in zip(eqH1,eqH2)]
+    wristDiff = np.abs(eqH1-eqH2)
         
-    return eqH1, eqH2, wristDiff, relDiff
+    return wristDiff, relDiff
 
 def strokedet():
     past = []
@@ -441,7 +443,7 @@ def strokedet():
 
     r = np.mean(ps)
 
-    if r >= 0.6:
+    if r >= 0.65:
         dir_path = os.getcwd()
         opsys = platform.system()
         
@@ -462,12 +464,12 @@ def strokedet():
     return r
 
 def strokedetII(r):
-    _, _, wristDiff, relDiff = handCalc(8)
+    wristDiff, relDiff = handCalc(8)
     relDiff = np.mean(relDiff[3:])
     
-    if relDiff >= 2:
+    if relDiff >= 1.5:
         ruling = 1
-    elif relDiff <= 0.5:
+    elif relDiff <= 0.7:
         ruling = 1
     else:
         ruling = 0
