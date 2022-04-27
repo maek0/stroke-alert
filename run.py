@@ -15,7 +15,7 @@ from strokedet_allfun import handCalc
 # r is the average of p-values of determining characteristics
 
 r = strokedet()
-if r < 0.5:
+if r < 0.35:
     print("--------------------")
     print("\nRaise your Hands!\n")
     print("--------------------")
@@ -27,15 +27,15 @@ if ruling == 0:
     opr = 100*(1-r)
     print("\n--------------------\n")
     print("No Stroke Detected\n")
-    if r < 0.5:
+    if r < 0.35:
         print("There is some uncertainty in the probability. For more accuracy, move to a place with better lighting.\nIf you feel dizzy or numbness in one arm or one side of your face, call EMS.")
     print("\nThere is a %.2f percent chance you are experiencing a stroke\n" % opr)
     print("--------------------")
 else:
     opr = 100*(1-r)
     print("--------------------\n")
-    print("Stroke Likely: call EMS\n")
-    print("\nThere is a %.2f percent chance you are experiencing a stroke" % opr)
+    print("Stroke Likely: call EMS immediately!")
+    print("\nThere is a %.2f percent chance you are experiencing a stroke\n" % opr)
     print("--------------------")
 
 # print(ruling)

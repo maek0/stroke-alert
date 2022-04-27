@@ -353,10 +353,10 @@ def handCalc(sec):
         else:
             sz = Hand1Yarray.shape[0]
 
-        eqH1 = Hand1Yarray[0:sz]
-        eqH2 = Hand2Yarray[0:sz]
-        relDiff = [a/b for a,b in zip(eqH1,eqH2)]
-        wristDiff = np.abs(eqH1-eqH2)
+    eqH1 = Hand1Yarray[0:sz]
+    eqH2 = Hand2Yarray[0:sz]
+    relDiff = [a/b for a,b in zip(eqH1,eqH2)]
+    wristDiff = np.abs(eqH1-eqH2)
         
     return wristDiff, relDiff
 
@@ -412,7 +412,7 @@ def strokedet():
 
     r = np.mean(ps)
 
-    if r >= 0.6:
+    if r >= 0.65:
         dir_path = os.getcwd()
         opsys = platform.system()
         
@@ -436,9 +436,9 @@ def strokedetII(r):
     wristDiff, rDiff = handCalc(5)
     rDiff = np.mean(rDiff[3:])
     
-    if rDiff >= 2:
+    if rDiff >= 1.5:
         ruling = 1
-    elif rDiff <= 0.5:
+    elif rDiff <= 0.7:
         ruling = 1
     else:
         ruling = 0
