@@ -47,18 +47,21 @@ def detect():
     if r < 0.5:
         st.markdown("""<style>.big-font {font-size:50px !important;}</style>""", unsafe_allow_html=True)
         st.markdown('<p class="big-font">Raise your hands</p>', unsafe_allow_html=True)
-        result = strokedetII(r)
+        ruling = strokedetII(r)
+        time.sleep(1)
     else:
-        result = 0
+        ruling = 0
 
-    if result == 0:
-        st.markdown("""<style>.big-font {font-size:50px !important;}</style>""", unsafe_allow_html=True)
-        st.markdown('<p class="big-font">Stroke Unlikely !!</p>', unsafe_allow_html=True)
+    if ruling == 0:
+        st.markdown("""<style>.big-font {font-size:0px !important;}</style>""", unsafe_allow_html=True)
+        st.markdown("""<style>.stroke-unlikely {font-size:50px !important;}</style>""", unsafe_allow_html=True)
+        st.markdown('<p class="stroke-unlikely">Stroke Unlikely !!</p>', unsafe_allow_html=True)
         st.write('Percent Confidence:', r*100)
         time.sleep(5)
     else:
-        st.markdown("""<style>.big-font {font-size:300px !important;}</style>""", unsafe_allow_html=True)
-        st.markdown('<p class="big-font">Stroke Likely !!</p>', unsafe_allow_html=True)
+        st.markdown("""<style>.big-font {font-size:0px !important;}</style>""", unsafe_allow_html=True)
+        st.markdown("""<style>.stroke-unlikely {font-size:50px !important;}</style>""", unsafe_allow_html=True)
+        st.markdown('<p class="stroke-unlikely">Stroke Likely !!</p>', unsafe_allow_html=True)
         st.write('Percent Confidence:', r*100)
         time.sleep(5)
 
@@ -109,10 +112,7 @@ if active_tab == "Home":
     hands = mp_hands.Hands(model_complexity=0, min_detection_confidence=0.5, min_tracking_confidence=0.5)
 
     st.write('Welcome to Stroke Alert! This application uses features from your face like your eyes, nose, and mouth to determine if you are having a stroke. It will also display how confident we are with our prediction.')
-    st.write('To use this app, first click "Start" to view the real time video with the face tesselation, that is extracting facial features. If this is your first time using the app, click "Set Baseline" so the algorithm can record baseline data (30 seconds). If you have a stored baseline and you are ready to run the detector, click "Run Detector!!')
-    st.write('To reset the app, click the "Stop" button below the video player')
-    st.write('Before using the app, please read the instructions for use carefully! :https://docs.google.com/document/d/1B8YqBl4R1NvvypYeVmfYzLNlG5ipcKHK3ztidYRZ3C8/edit')
-
+    
     webrtc_streamer(key = "key", video_processor_factory=VideoProcessor)
     with st.sidebar:
         st.title('Welcome to Stroke Alert!')
@@ -122,10 +122,13 @@ if active_tab == "Home":
         
 elif active_tab == "Directions":
     st.write("Directions")
+    st.write('To use this app, first click "Start" to view the real time video with the face tesselation, that is extracting facial features. If this is your first time using the app, click "Set Baseline" so the algorithm can record baseline data (30 seconds). If you have a stored baseline and you are ready to run the detector, click "Run Detector!!')
+    st.write('To reset the app, click the "Stop" button below the video player')
+    st.write('Before using the app, please read the instructions for use carefully! :https://docs.google.com/document/d/1B8YqBl4R1NvvypYeVmfYzLNlG5ipcKHK3ztidYRZ3C8/edit')
 
 elif active_tab == "Information":
     st.write("Information")
-    st.markdown()
+    st.write("INFORMATION FROM IFU") #st.markdown() cool font stuff
 
 else:
     st.error("Something has gone wrong.")
