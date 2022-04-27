@@ -17,8 +17,8 @@ mp_hands = mp.solutions.hands
 face_drawing_spec = mp_drawing.DrawingSpec(color=[244,244,244],thickness=1)
 cap = cv2.VideoCapture(0)
 
-face_mesh = mp_face_mesh.FaceMesh(max_num_faces=1, refine_landmarks=True, min_detection_confidence=0.8, min_tracking_confidence=0.7)
-hands = mp_hands.Hands(model_complexity=0, min_detection_confidence=0.5, min_tracking_confidence=0.5)
+face_mesh = mp_face_mesh.FaceMesh(max_num_faces=5, refine_landmarks=True, min_detection_confidence=0.8, min_tracking_confidence=0.7)
+hands = mp_hands.Hands(max_num_hands=10,model_complexity=0, min_detection_confidence=0.5, min_tracking_confidence=0.5)
 
 while cap.isOpened():
     success, image = cap.read()
@@ -42,6 +42,12 @@ while cap.isOpened():
                 connections=mp_face_mesh.FACEMESH_TESSELATION,
                 landmark_drawing_spec=None,
                 connection_drawing_spec=face_drawing_spec)
+            # mp_drawing.draw_landmarks(
+            #     image=image, 
+            #     landmark_list=face_landmarks,
+            #     connections=mp_face_mesh.FACEMESH_CONTOURS,
+            #     landmark_drawing_spec=None, 
+            #     connection_drawing_spec=mp_drawing_styles.get_default_face_mesh_contours_style())
     
     if hands_result.multi_hand_landmarks:
         for hand_landmarks in hands_result.multi_hand_landmarks:
