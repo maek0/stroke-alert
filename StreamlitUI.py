@@ -121,15 +121,33 @@ if active_tab == "Home":
         st.button("Run Detector!!", on_click = detect)
         
 elif active_tab == "Directions":
-    st.write("Directions")
-    st.write('To use this app, first click "Start" to view the real time video with the face tesselation, that is extracting facial features. If this is your first time using the app, click "Set Baseline" so the algorithm can record baseline data (30 seconds). If you have a stored baseline and you are ready to run the detector, click "Run Detector!!')
     st.write('To reset the app, click the "Stop" button below the video player')
-    st.write('Before using the app, please read the instructions for use carefully! :https://docs.google.com/document/d/1B8YqBl4R1NvvypYeVmfYzLNlG5ipcKHK3ztidYRZ3C8/edit')
-
+    st.markdown("## Directions for Use:")
+    st.markdown("1. First press the start button to run the video player.")
+    st.markdown("2. Upload a baseline if this is the first time you are using the application by pressing the ‘Set Baseline’ button.")
+    st.markdown("3. Allow the algorithm to film for 30 seconds. Maintain proper lighting and eye contact with the camera to allow for best results.")
+    st.markdown("4. After setting a baseline, the algorithm is ready to be used.")
+    st.markdown("5. If you believe you may be having a stroke, press the ‘Run Detector’ button.")
+    st.markdown("6. If the algorithm says “Stroke Unlikely”, continue to monitor symptoms.")
+    st.markdown("7. If the algorithm says “Stroke Likely”, call EMS.")
 elif active_tab == "Information":
-    st.write("Information")
-    st.write("INFORMATION FROM IFU") #st.markdown() cool font stuff
-
+    st.markdown("# Instructions for Use Stroke Alert- Stroke Detection Algorithm")
+    st.markdown("## Device Name:")
+    st.markdown("The device's brand name is Stroke Alert.")
+    st.markdown("## Action Mechanism:")
+    st.markdown("The purpose of this system is to analyze an individual’s facial characteristics to determine their likelihood of suffering a stroke at that moment. The system is intended to increase the user’s confidence in their symptoms being indicative of a potential stroke; this will be communicated to the user through a display on the device screen that contains the individual’s current calculated likelihood of stroke – displayed as a confidence interval.")
+    st.markdown("## Indications:")
+    st.markdown("The Stroke Alert is intended to encourage the user to seek medical attention when symptoms of stroke are recognized by the system. This is indicated for users who are at high risk for stroke. An individual’s risk for stroke can increase with genetic predisposition, a personal history of stroke, a family history of stroke, metabolic syndrome (high blood sugar, blood pressure, cholesterol, etc.), or other lifestyle factors that could be discussed with a general practitioner. ")
+    st.markdown("## Contraindications:")
+    st.markdown("This product should not be used as a primary diagnostic tool. If you are having a stroke, call EMS.")
+    st.markdown("## Adverse Reactions:")
+    st.markdown("No adverse reactions have been issued")
+    st.markdown("## Warnings:")
+    st.markdown("1. This device is not intended to be a stand alone diagnostic tool. If you are having a stroke, call EMS.")
+    st.markdown("2. This device is not to be used in replacement of a physician.")
+    st.markdown("## Precaution:")
+    st.markdown("1. This device is not intended to be a stand alone diagnostic tool. If you are having a stroke, call EMS.")
+    st.markdown("2. Clinicians and patients must follow the intended use of the device.")
 else:
     st.error("Something has gone wrong.")
 
