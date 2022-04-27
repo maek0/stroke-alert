@@ -24,7 +24,7 @@ def facepose(sec):
     HandY = []
 
     drawing_spec = mp_drawing.DrawingSpec(thickness=1, circle_radius=1)
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
     endtime = time.time() + sec
 
     face_mesh = mp_face_mesh.FaceMesh(max_num_faces=1, refine_landmarks=True, min_detection_confidence=0.8, min_tracking_confidence=0.7)
@@ -276,7 +276,7 @@ def handdet(sec):
     Hand2Y = []
 
     drawing_spec = mp_drawing.DrawingSpec(thickness=1, circle_radius=1)
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
     endtime = time.time() + sec
 
     hands = mp_hands.Hands(model_complexity=0, min_detection_confidence=0.5, min_tracking_confidence=0.5)
@@ -382,12 +382,12 @@ def handCalc(sec):
         else:
             sz = Hand1Yarray.shape[0]
 
-        eqH1 = Hand1Yarray[0:sz,0]
-        eqH2 = Hand2Yarray[0:sz,0]
+        eqH1 = Hand1Yarray[0:sz]
+        eqH2 = Hand2Yarray[0:sz]
         relDiff = [a/b for a,b in zip(eqH1,eqH2)]
         wristDiff = np.abs(eqH1-eqH2)
         
-    return eqH1, eqH2, wristDiff, relDiff
+    return wristDiff, relDiff
 
 def strokedet():
     past = []
@@ -462,7 +462,7 @@ def strokedet():
     return r
 
 def strokedetII(r):
-    _, _, wristDiff, relDiff = handCalc(8)
+    wristDiff, relDiff = handCalc(8)
     relDiff = np.mean(relDiff[3:])
     
     if relDiff >= 2:

@@ -1,7 +1,11 @@
-from showVidFcns import strokedet
-from showVidFcns import strokedetII
-from showVidFcns import setbase
-from showVidFcns import handCalc
+# from showVidFcns import strokedet
+# from showVidFcns import strokedetII
+# from showVidFcns import setbase
+# from showVidFcns import handCalc
+from strokedet_allfun import strokedet
+from strokedet_allfun import strokedetII
+from strokedet_allfun import setbase
+from strokedet_allfun import handCalc
 
 # setbase()
 
