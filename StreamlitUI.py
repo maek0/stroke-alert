@@ -23,14 +23,14 @@ mp_hands = mp.solutions.hands
 face_mesh = mp_face_mesh.FaceMesh(max_num_faces=1, refine_landmarks=True, min_detection_confidence=0.8, min_tracking_confidence=0.7)
 hands = mp_hands.Hands(model_complexity=0, min_detection_confidence=0.5, min_tracking_confidence=0.5)
 
-st.write('Welcome to Stroke Alert! This application uses features from your face like your eyes, nose, and mouth to determine if you are having a stroke. It will also display how confident we are with our prediction.')
-st.write('To use this app, first click "Start" to view the real time video with the face tesselation, that is extracting facial features. If this is your first time using the app, click "Set Baseline" so the algorithm can record baseline data (30 seconds). If you have a stored baseline and you are ready to run the detector, click "Run Detector!!')
+st.write('Welcome to Stroke Alert! This application uses features from your face like your eyes, nose, and mouth to determine if you are having a stroke. To improve our prediction, the app will also analyze if you can raise your arms to the same height by tracking the positions of your wrists. It will also display how confident we are with our prediction.')
+st.write('To use this app, first click "Start" to view the real time video with the face tesselation, that is extracting facial features. If this is your first time using the app, click "Set Baseline" so the algorithm can record baseline data (30 seconds). If you have a stored baseline and you are ready to run the detector, click "Run Detector!!. Ensure that your face is in the view of the camera along with your hands and wrists.')
 st.write('To reset the app, click the "Stop" button below the video player')
 st.write('Before using the app, please read the instructions for use carefully! :https://docs.google.com/document/d/1B8YqBl4R1NvvypYeVmfYzLNlG5ipcKHK3ztidYRZ3C8/edit')
 
 def detect():
-    result, r = strokedet()
-    if result == 0:
+    ruling, r = strokedet()
+    if ruling == 0:
         st.markdown("""<style>.big-font {font-size:50px !important;}</style>""", unsafe_allow_html=True)
         st.markdown('<p class="big-font">Stroke Unlikely !!</p>', unsafe_allow_html=True)
         st.write('Percent Confidence:', r*100)
